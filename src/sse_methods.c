@@ -91,7 +91,7 @@ void matvec_unrolled_16sse(int n, float *vec_c, const float *mat_a, const float 
 }
 
 void matmat_listing7_sse(float *mat_c, int a_h, int n, const float *mat_a, int b_w, const float *mat_b) {
-    for (int i = 0; i < n; i += 1) {
+    for (int i = 0; i < a_h; i += 1) {
         for (int j = 0; j < n; j += 1) {
             __m128 x0 = _mm_set1_ps(mat_a[i * n + j]);
             for (int k = 0; k < b_w; k += 4) {
