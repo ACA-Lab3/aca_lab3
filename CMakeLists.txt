@@ -13,13 +13,15 @@ set(SOURCE_FILES main.c
         src/matvec_auto.c include/matvec_auto.h
         src/matmat_auto.c include/matmat_auto.h)
 
-set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-std=gnu99 -msse4.1 -msse3 -O2 -Wall -Wextra -m64")
-set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=gnu99 -msse4.1 -msse3 -O2 -Wall -Wextra -m64")
+#set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-O3 -march=native -mtune=native -funroll-loops -ftree-vectorize -ftree-vectorizer-verbose=1  -ffast-math -fassociative-math")
+#set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-O3 -march=native -mtune=native -funroll-loops -ftree-vectorize -ftree-vectorizer-verbose=1  -ffast-math -fassociative-math")
+set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-std=gnu99 -msse4.1 -msse3 -O2 -funroll-loops -Wall -Wextra -m64 -mtune=native")
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=gnu99 -msse4.1 -msse3 -O2 -funroll-loops -Wall -Wextra -m64 -mtune=native")
 
-set_source_files_properties(src/matvec_auto.c PROPERTIES COMPILE_FLAGS "-fopenmp -m64 -O2 -unroll-loops -ftree-vectorizer-verbose=4 -fopt-info-all -fopt-info-missed-all -ftree-loop-vectorize -fopt-info-vec-missed")
-set_source_files_properties(src/matmat_auto.c PROPERTIES COMPILE_FLAGS "-fopenmp -m64 -O2 -unroll-loops -ftree-vectorizer-verbose=4 -fopt-info-all -fopt-info-missed-all -ftree-loop-vectorize -fopt-info-vec-missed")
-#set_source_files_properties(src/matmat_auto.c PROPERTIES COMPILE_FLAGS "-fopenmp -m64 -O2 -unroll-loops -ftree-vectorizer-verbose=4 -fopt-info-vec-all -ftree-loop-vectorize -fopt-info-vec-missed")
-#set_source_files_properties(src/matvec_auto.c PROPERTIES COMPILE_FLAGS "-fopenmp -m64 -O2 -unroll-loops -ftree-vectorizer-verbose=4 -fopt-info-vec-all -ftree-loop-vectorize -fopt-info-vec-missed")
+#set_source_files_properties(src/matvec_auto.c PROPERTIES COMPILE_FLAGS "-fopenmp -m64 -mtune=native -O2 -unroll-loops -funroll-loops -ftree-vectorizer-verbose=4 -fopt-info-all -fopt-info-missed-all -ftree-loop-vectorize -fopt-info-vec-missed")
+#set_source_files_properties(src/matmat_auto.c PROPERTIES COMPILE_FLAGS "-fopenmp -m64 -mtune=native -O2 -unroll-loops -funroll-loops -ftree-vectorizer-verbose=4 -fopt-info-all -fopt-info-missed-all -ftree-loop-vectorize -fopt-info-vec-missed")
+set_source_files_properties(src/matmat_auto.c PROPERTIES COMPILE_FLAGS "-m64 -mtune=native -O2 -funroll-loops -unroll-loops -ftree-vectorizer-verbose=4 -fopt-info-vec-all -ftree-loop-vectorize -fopt-info-vec-missed")
+set_source_files_properties(src/matvec_auto.c PROPERTIES COMPILE_FLAGS "-m64 -mtune=native -O2 -funroll-loops -unroll-loops -ftree-vectorizer-verbose=4 -fopt-info-vec-all -ftree-loop-vectorize -fopt-info-vec-missed")
 add_executable(aca_lab3 ${SOURCE_FILES})
 target_link_libraries(aca_lab3 m)
 
