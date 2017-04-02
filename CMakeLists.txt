@@ -14,9 +14,12 @@ set(SOURCE_FILES main.c
         src/matmat_auto.c include/matmat_auto.h)
 
 set(CMAKE_C_FLAGS ${CMAKE_C_FLAGS} "-std=gnu99 -msse4.1 -msse3 -O2 -Wall -Wextra -m64")
+set(CMAKE_CXX_FLAGS ${CMAKE_CXX_FLAGS} "-std=gnu99 -msse4.1 -msse3 -O2 -Wall -Wextra -m64")
 
-set_source_files_properties(src/matvec_auto.c PROPERTIES COMPILE_FLAGS "-m64 -O2 -ftree-vectorizer-verbose=4 -ftree-loop-vectorize -fopt-info-vec-missed")
-set_source_files_properties(src/matmat_auto.c PROPERTIES COMPILE_FLAGS "-m64 -O2 -ftree-vectorizer-verbose=4 -ftree-loop-vectorize -fopt-info-vec-missed")
+set_source_files_properties(src/matvec_auto.c PROPERTIES COMPILE_FLAGS "-fopenmp -m64 -O2 -unroll-loops -ftree-vectorizer-verbose=4 -fopt-info-all -fopt-info-missed-all -ftree-loop-vectorize -fopt-info-vec-missed")
+set_source_files_properties(src/matmat_auto.c PROPERTIES COMPILE_FLAGS "-fopenmp -m64 -O2 -unroll-loops -ftree-vectorizer-verbose=4 -fopt-info-all -fopt-info-missed-all -ftree-loop-vectorize -fopt-info-vec-missed")
+#set_source_files_properties(src/matmat_auto.c PROPERTIES COMPILE_FLAGS "-fopenmp -m64 -O2 -unroll-loops -ftree-vectorizer-verbose=4 -fopt-info-vec-all -ftree-loop-vectorize -fopt-info-vec-missed")
+#set_source_files_properties(src/matvec_auto.c PROPERTIES COMPILE_FLAGS "-fopenmp -m64 -O2 -unroll-loops -ftree-vectorizer-verbose=4 -fopt-info-vec-all -ftree-loop-vectorize -fopt-info-vec-missed")
 add_executable(aca_lab3 ${SOURCE_FILES})
 target_link_libraries(aca_lab3 m)
 
@@ -34,3 +37,9 @@ set_tests_properties(aca_lab3vt4 PROPERTIES PASS_REGULAR_EXPRESSION "(SSE.*versi
 .*(Listing 6 C Program verified against listing 5 C Program - OK)\
 .*(Auto vectorized version verified against simple version - OK)")
 set(CTEST_PARALLEL_LEVEL 3)
+
+find_package(OpenMP)
+if (OPENMP_FOUND)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+endif ()
